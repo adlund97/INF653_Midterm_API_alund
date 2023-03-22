@@ -35,8 +35,10 @@ if ($quote->id == null && $quote->author_id == null && $quote->category_id == nu
 
 if ($quote->author_id == null && $quote->category_id == null) {
     $result = $quote->read_single();
-    $num = $result->rowCount();
     
+    $row = $result->fetch(PDO::FETCH_ASSOC);
+    extract($row);
+                          
     $quote_item = array(
         'id' => $id,
         'quote' => $quote,
@@ -44,7 +46,7 @@ if ($quote->author_id == null && $quote->category_id == null) {
         'category' => $category
     );
     
-    print_r(json_encode($quote_arr));
+    print_r(json_encode($quote_item));
     die();
 }
 
