@@ -65,10 +65,18 @@ class Author
 
         try {
             $stmt->execute();
-            return true;
+            
+            $query = 'SELECT id, author FROM ' . $this->table . ' WHERE author = ? LIMIT 1';
+            
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(1, $this->author);
+            $stmt->execute();
+            
+            return $stmt;
+            
         } catch (PDOException $e) {
             echo json_encode(array('message' => 'author_id Not Found'));
-            return false;
+            die();
         }
     }
 
