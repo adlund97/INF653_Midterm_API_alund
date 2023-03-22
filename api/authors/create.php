@@ -31,6 +31,9 @@ $author->author = $data->author;
 
 $author->create();
 
+$row = $result->fetch(PDO::FETCH_ASSOC);
+extract($row);
+
 $author_item = array(
     'id' => $author->id,
     'author' => $author->author
