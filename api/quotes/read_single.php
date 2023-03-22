@@ -33,6 +33,21 @@ if ($quote->id == null && $quote->author_id == null && $quote->category_id == nu
     die();
 }
 
+if ($quote->author_id == null && $quote->category_id == null) {
+    $result = $quote->read_single();
+    $num = $result->rowCount();
+    
+    $quote_item = array(
+        'id' => $id,
+        'quote' => $quote,
+        'author' => $author,
+        'category' => $category
+    );
+    
+    print_r(json_encode($quote_arr));
+    die();
+}
+
 // Calling read_single funciton in model file to execute Get request
 $result = $quote->read_single();
 
