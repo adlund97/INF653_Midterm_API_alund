@@ -35,18 +35,24 @@ if ($quote->id == null && $quote->author_id == null && $quote->category_id == nu
 
 if ($quote->author_id == null && $quote->category_id == null) {
     $result = $quote->read_single();
+    $num = $result->rowCount();
     
-    $row = $result->fetch(PDO::FETCH_ASSOC);
-    extract($row);
-                          
-    $quote_item = array(
-        'id' => $id,
-        'quote' => $quote,
-        'author' => $author,
-        'category' => $category
-    );
-    
-    print_r(json_encode($quote_item));
+    if ($num > 0) {
+        $row = $result->fetch(PDO::FETCH_ASSOC);
+        extract($row);
+
+        $quote_item = array(
+            'id' => $id,
+            'quote' => $quote,
+            'author' => $author,
+            'category' => $category
+        );
+
+        echo json_encode($quote_item);
+    } else {
+        // if no quotes
+        echo json_encode(array('message' => 'No Quotes Found'));
+    }
     die();
 }
 
