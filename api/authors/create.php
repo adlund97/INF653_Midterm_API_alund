@@ -50,3 +50,4 @@ if ($author->author !== null) {
         echo json_encode(array('message' => 'Quote Not Created'));
     }
 }
+*/
