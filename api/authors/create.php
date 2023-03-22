@@ -29,6 +29,16 @@ if ($data->author == null) {
 
 $author->author = $data->author;
 
+$author->create();
+
+$author_item = array(
+    'id' => $author->id,
+    'author' => $author->author
+);
+
+echo json_encode($author_item);
+
+/*
 if ($author->author !== null) {
     // Calling create funciton in model file to execute POST request
     if ($author->create()) {
