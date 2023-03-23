@@ -22,7 +22,7 @@ $author = new Author($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if ($data->id == null) {
+if ($data == null) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
     exit();
 }
@@ -33,7 +33,7 @@ $name = $author->id;
 
 // Calling Delete funciton in model file to execute Delete request
 if ($author->delete()) {
-    echo json_encode(array('message' => `Author ID: {$name} Delete`));
+    echo json_encode(array('message' => `{$name}`));
 } else {
     echo json_encode(array('message' => 'Quote Not Delete'));
 }
