@@ -4,8 +4,15 @@
 // Midterm Project PHP OOP REST API
 // turn in: March 22, 2023
 
-// storing type of request made to API as a variable
+header('Access-Control-Allow-Origin: *');
+header('Content-Type: application/json');
 $method = $_SERVER['REQUEST_METHOD'];
+
+if ($method === 'OPTIONS') {
+    header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+    header('Access-Control-Allow-Headers: Origin, Accept, Content-Type, X-Requested-With');
+    exit();
+}
 
 // Conditionals for getting appropriate files for each type of request
 if ($method == 'GET') {
