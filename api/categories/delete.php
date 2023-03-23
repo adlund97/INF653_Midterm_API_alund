@@ -33,7 +33,7 @@ $name = $category->id;
 
 // Calling Delete funciton in model file to execute Delete request
 if ($category->delete()) {
-    echo json_encode($data->id);
+    echo json_encode(array('message' => `{$data->id}`));
 } else {
     echo json_encode(array('message' => 'Quote Not Delete'));
 }
