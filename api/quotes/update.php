@@ -22,24 +22,9 @@ $quote = new Quote($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if ($data->id == null) {
+if (!property_exists($data, 'id') || !property_exists($data, 'quote') || !property_exists($data, 'author_id') || !property_exists($data, 'category_id')) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
-}
-
-if ($data->quote == null) {
-    echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
-}
-
-if ($data->author_id == null) {
-    echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
-}
-
-if ($data->category_id == null) {
-    echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
+    die();
 }
 
 $quote->id = $data->id;
@@ -47,9 +32,15 @@ $quote->quote = $data->quote;
 $quote->author_id = $data->author_id;
 $quote->category_id = $data->category_id;
 
-// Calling create funciton in model file to execute PUT request
-if ($quote->update()) {
-    echo json_encode(array('message' => 'Quote Updated'));
-} else {
-    echo json_encode(array('message' => 'Quote Not Updated'));
-}
+$quote->update();
+
+$quote->read_single();
+
+$quote_item = array(
+    'id' => $quote->id,
+    'quote' => $quote->quote,
+    'author_id' => $quote->author_id,
+    'category_id' => $quote->category_id
+);
+
+echo json_encode($quote_item);
