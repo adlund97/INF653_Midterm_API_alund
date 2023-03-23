@@ -22,22 +22,21 @@ $category = new Category($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if ($data->id == null) {
+if (!property_exists($data, 'id') || !property_exists($data, 'category')) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
-}
-
-if ($data->category == null) {
-    echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
+    die();
 }
 
 $category->id = $data->id;
 $category->category = $data->category;
 
-// Calling create funciton in model file to execute PUT request
-if ($category->update()) {
-    echo json_encode(array('message' => 'Quote Updated'));
-} else {
-    echo json_encode(array('message' => 'Quote Not Updated'));
-}
+$category->update();
+
+$category->read_single();
+
+$category_item = array(
+    'id' => $category->id,
+    'category' => $category->category
+);
+
+echo json_encode($category_item);
