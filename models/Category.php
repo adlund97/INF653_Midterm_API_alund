@@ -30,6 +30,27 @@ class Category
 
     public function read_single()
     {
+        if ($this->id == null) {
+            $query = 'SELECT id, category FROM ' . $this->table . ' WHERE category = ? LIMIT 1';
+
+            // Use PDO to prepare and execute statement
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(1, $this->category); // sets id in WHERE clause to whatever was sent in request
+            $stmt->execute();
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($row == null) {
+                echo json_encode(array('message' => 'category_id Not Found'));
+                die();
+            }
+
+            $this->id = $row['id'];
+            $this->category = $row['category'];
+
+            return $stmt;
+        }
+
         $query = 'SELECT id, category FROM ' . $this->table . ' WHERE id = ? LIMIT 1';
 
         // Use PDO to prepare and execute statement
@@ -68,7 +89,7 @@ class Category
             return true;
         } catch (PDOException $e) {
             echo json_encode(array('message' => 'category_id Not Found'));
-            return false;
+            die();
         }
     }
 
@@ -112,7 +133,7 @@ class Category
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            echo json_encode(array('message' => 'No Category Found'));
+            echo json_encode(array('message' => 'No Quotes Found'));
             return false;
         }
     }
