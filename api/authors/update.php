@@ -22,7 +22,7 @@ $author = new Author($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if (!isset($_PUT['id']) || !isset($_PUT['author'])) {
+if (!property_exists($data, 'id') || !property_exists($data, 'author')) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
     die();
 }
