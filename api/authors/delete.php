@@ -33,7 +33,7 @@ $name = $author->id;
 
 // Calling Delete funciton in model file to execute Delete request
 if ($author->delete()) {
-    echo json_encode(array('message' => `{$data->id}`));
+    echo json_encode($data->id);
 } else {
     echo json_encode(array('message' => 'Quote Not Delete'));
 }
