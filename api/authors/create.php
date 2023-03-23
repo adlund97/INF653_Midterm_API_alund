@@ -22,9 +22,9 @@ $author = new Author($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if ($data == null) {
+iif (!isset($_POST['author'])) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
+    die();
 }
 
 $author->author = $data->author;
