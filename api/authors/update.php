@@ -22,12 +22,7 @@ $author = new Author($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if ($data->id == null) {
-    echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
-}
-
-if ($data->author == null) {
+if ($data == null) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
     exit();
 }
@@ -35,9 +30,13 @@ if ($data->author == null) {
 $author->id = $data->id;
 $author->author = $data->author;
 
-// Calling create funciton in model file to execute PUT request
-if ($author->update()) {
-    echo json_encode(array('message' => 'Quote Updated'));
-} else {
-    echo json_encode(array('message' => 'Quote Not Updated'));
-}
+$author->update();
+
+$author->read_single();
+
+$author_item = array(
+    'id' => $author->id,
+    'author' => $author->author
+);
+
+echo json_encode($author_item);
