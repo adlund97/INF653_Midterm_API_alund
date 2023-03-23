@@ -22,7 +22,7 @@ $author = new Author($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if ($data->author == null) {
+if ($data == null) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
     exit();
 }
@@ -31,8 +31,7 @@ $author->author = $data->author;
 
 $author->create();
 
-$row = $result->fetch(PDO::FETCH_ASSOC);
-extract($row);
+$author->read_single();
 
 $author_item = array(
     'id' => $author->id,
@@ -40,14 +39,3 @@ $author_item = array(
 );
 
 echo json_encode($author_item);
-
-/*
-if ($author->author !== null) {
-    // Calling create funciton in model file to execute POST request
-    if ($author->create()) {
-        echo json_encode(array('message' => 'Quote Created'));
-    } else {
-        echo json_encode(array('message' => 'Quote Not Created'));
-    }
-}
-*/
