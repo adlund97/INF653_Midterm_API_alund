@@ -45,7 +45,38 @@ class Quote
 
   public function read_single()
   {
-    $case = 0;
+    if ($this->quote !== null) {
+      $query = 'SELECT 
+                  q.id, 
+                  q.quote,
+                  a.author AS author,
+                  c.category AS category
+                FROM 
+                  ' . $this->table . ' AS q
+                LEFT OUTER JOIN
+                  categories AS c ON q.category_id = c.id
+                LEFT OUTER JOIN
+                  authors AS a ON q.author_id = a.id
+                WHERE q.quote = ?';
+
+      // Use PDO to prepare and execute statement
+      $stmt = $this->connection->prepare($query);
+      $stmt->bindParam(1, $this->quote); // sets quote in WHERE clause to whatever was sent in request
+      $stmt->execute();
+
+      $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+      if ($row == null) {
+        echo json_encode(array('message' => 'Not Found'));
+        die();
+      }
+
+      $this->id = $row['id'];
+      $this->quote = $row['quote'];
+
+      return $stmt;
+    }
+
     if ($this->id !== null) {
       $case = 1;
       $query = 'SELECT 
@@ -152,8 +183,8 @@ class Quote
       $stmt->execute();
       return true;
     } catch (PDOException $e) {
-      echo json_encode(array('message' => 'either author_id or category_id Not Found'));
-      return false;
+      echo json_encode(array('message' => 'author_id Not Found'));
+      die();
     }
   }
 
@@ -180,8 +211,8 @@ class Quote
       $stmt->execute();
       return true;
     } catch (PDOException $e) {
-      echo json_encode(array('message' => 'either author_id or category_id Not Found'));
-      return false;
+      echo json_encode(array('message' => 'author_id Not Found'));
+      die();
     }
   }
 
@@ -202,7 +233,7 @@ class Quote
       return true;
     } catch (PDOException $e) {
       echo json_encode(array('message' => 'No Quotes Found'));
-      return false;
+      die();
     }
   }
 }
