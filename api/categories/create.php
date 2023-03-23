@@ -22,16 +22,20 @@ $category = new Category($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if ($data->category == null) {
+if (!property_exists($data, 'category')) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
+    die();
 }
 
 $category->category = $data->category;
 
-// Calling create funciton in model file to execute POST request
-if ($category->create()) {
-    echo json_encode(array('message' => 'Quote Created'));
-} else {
-    echo json_encode(array('message' => 'Quote Not Created'));
-}
+$category->create();
+
+$category->read_single();
+
+$category_item = array(
+    'id' => $category->id,
+    'category' => $category->category
+);
+
+echo json_encode($category_item);
