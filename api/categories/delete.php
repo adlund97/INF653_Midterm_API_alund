@@ -22,9 +22,9 @@ $category = new Category($db);
 
 $data = json_decode(file_get_contents("php://input"));
 
-if ($data->id == null) {
+if (!property_exists($data, 'id')) {
     echo json_encode(array('message' => 'Missing Required Parameters'));
-    exit();
+    die();
 }
 
 $category->id = $data->id;
@@ -33,7 +33,7 @@ $name = $category->id;
 
 // Calling Delete funciton in model file to execute Delete request
 if ($category->delete()) {
-    echo json_encode(array('message' => `Category ID: {$name} Delete`));
+    echo json_encode(array('message' => `{$data->id}`));
 } else {
     echo json_encode(array('message' => 'Quote Not Delete'));
 }
