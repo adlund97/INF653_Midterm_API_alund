@@ -30,6 +30,27 @@ class Author
 
     public function read_single()
     {
+        if ($this->id == null) {
+            $query = 'SELECT id, author FROM ' . $this->table . ' WHERE author = ? LIMIT 1';
+
+            // Use PDO to prepare and execute statement
+            $stmt = $this->connection->prepare($query);
+            $stmt->bindParam(1, $this->author); // sets id in WHERE clause to whatever was sent in request
+            $stmt->execute();
+
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($row == null) {
+                echo json_encode(array('message' => 'author_id Not Found'));
+                die();
+            }
+
+            $this->id = $row['id'];
+            $this->author = $row['author'];
+
+            return $stmt;
+        }
+        
         $query = 'SELECT id, author FROM ' . $this->table . ' WHERE id = ? LIMIT 1';
 
         // Use PDO to prepare and execute statement
@@ -65,15 +86,7 @@ class Author
 
         try {
             $stmt->execute();
-            
-            $query = 'SELECT id, author FROM ' . $this->table . ' WHERE author = ? LIMIT 1';
-            
-            $stmt = $this->connection->prepare($query);
-            $stmt->bindParam(1, $this->author);
-            $stmt->execute();
-            
-            return $stmt;
-            
+            return true;
         } catch (PDOException $e) {
             echo json_encode(array('message' => 'author_id Not Found'));
             die();
