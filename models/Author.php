@@ -133,7 +133,7 @@ class Author
             $stmt->execute();
             return true;
         } catch (PDOException $e) {
-            echo json_encode(array('message' => 'No Authors Found'));
+            echo json_encode(array('message' => 'No Quotes Found'));
             return false;
         }
     }
